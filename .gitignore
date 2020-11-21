@@ -1,5 +1,16 @@
 # Compiled class file
 *.class
+target/
+/target/
+/target/
+/target/failsafe-reports/
+
+# Intellij Idea
+.idea/
+*.iml
+*.log
+**/.iml
+**/.idea
 
 # Log file
 *.log
