@@ -20,6 +20,7 @@ public class Tenant {
     @Column(name = "CREATED_DATE")
     private Date createdDate;
 
+    @Column(name = "UPDATED_DATE")
     private Date updatedDate;
 
     public String getId() {

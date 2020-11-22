@@ -4,7 +4,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 
 @Entity
@@ -15,6 +19,12 @@ public class Message {
 
     @Column
     private String message;
+
+    @JoinColumns(foreignKey = @ForeignKey(name = "FK_MESSAGE_USER"),
+            value = @JoinColumn(name = "CREATED_BY", referencedColumnName = "ID", insertable = false,
+                    updatable = false))
+    @ManyToOne
+    private User createdBy;
 
     @Column
     private String sendTo;
@@ -49,6 +59,14 @@ public class Message {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     public String getSendTo() {
