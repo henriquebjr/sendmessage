@@ -1,4 +1,4 @@
-package com.henriquebjr.service;
+package com.henriquebjr.sendmessage.service;
 
 import org.flywaydb.core.Flyway;
 
