@@ -1,14 +1,16 @@
 package com.henriquebjr.sendmessage.service;
 
-import com.henriquebjr.sendmessage.model.Tenant;
 import com.henriquebjr.sendmessage.model.User;
 import com.henriquebjr.sendmessage.repository.UserRepository;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static javax.transaction.Transactional.TxType.NOT_SUPPORTED;
 
 @RequestScoped
 public class UserService {
@@ -17,24 +19,22 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
-    public User insert(Tenant tenant, User user) {
+    public User insert(User user) {
         user.setId(UUID.randomUUID().toString());
-        user.setTenant(tenant);
         userRepository.persist(user);
 
         return userRepository.findById(user.getId());
     }
 
     @Transactional
-    public User update(Tenant tenant, User user) {
+    public User update(User user) {
         Optional<User> userOptional = userRepository.findByIdOptional(user.getId());
-        if(userOptional.isEmpty() || !userOptional.get().getTenant().getId().equals(tenant.getId())) {
+        if(userOptional.isEmpty()) {
             throw new RuntimeException("User not found. Id: " + user.getId());
         }
 
         User currentUser = userOptional.get();
 
-        currentUser.setTenant(tenant);
         currentUser.setActive(user.getActive());
         currentUser.setName(user.getName());
 
@@ -42,12 +42,22 @@ public class UserService {
     }
 
     @Transactional
-    public void delete(Tenant tenant, User user) {
-        Optional<User> userOptional = userRepository.findByIdOptional(user.getId());
-        if(userOptional.isEmpty() || !user.getTenant().getId().equals(tenant.getId())) {
-            throw new RuntimeException("User not found. Id: " + user.getId());
+    public void delete(String id) {
+        Optional<User> userOptional = userRepository.findByIdOptional(id);
+        if(userOptional.isEmpty()) {
+            throw new RuntimeException("User not found. Id: " + id);
         }
 
-        userRepository.delete(user);
+        userRepository.delete(id);
+    }
+
+    @Transactional(NOT_SUPPORTED)
+    public List<User> listAll() {
+        return userRepository.listAll();
+    }
+
+    @Transactional(NOT_SUPPORTED)
+    public User retrieveById(String userId) {
+        return userRepository.findById(userId);
     }
 }
