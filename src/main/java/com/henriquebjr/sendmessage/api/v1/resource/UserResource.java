@@ -52,8 +52,8 @@ public class UserResource {
     }
 
     @POST
-    public Response insert(UserDTO userDTO) throws Exception {
-        User user = userService.insert("1", userMapper.map(userDTO));
+    public Response insert(@Context SecurityContext securityContext, UserDTO userDTO) throws Exception {
+        User user = userService.insert(securityService.getCurrentTenantId(securityContext), userMapper.map(userDTO));
         return Response
                 .ok(userMapper.map(user))
                 .status(201)
