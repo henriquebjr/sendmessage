@@ -3,8 +3,10 @@ package com.henriquebjr.sendmessage.api.v1.resource;
 import com.henriquebjr.sendmessage.api.v1.dto.UserDTO;
 import com.henriquebjr.sendmessage.api.v1.mapper.UserMapper;
 import com.henriquebjr.sendmessage.model.User;
+import com.henriquebjr.sendmessage.service.SecurityService;
 import com.henriquebjr.sendmessage.service.UserService;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -14,10 +16,15 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 
 @Path("/users")
+@RolesAllowed("admin")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
 
     @Inject
@@ -26,27 +33,27 @@ public class UserResource {
     @Inject
     private UserMapper userMapper;
 
+    @Inject
+    private SecurityService securityService;
+
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response list() {
+    public Response list(@Context SecurityContext securityContext) {
         return Response
-                .ok(userMapper.map(userService.listAll()))
+                .ok(userMapper.map(userService.listAll(securityService.getCurrentTenantId(securityContext))))
                 .build();
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response get(@PathParam("id") String id) {
+    @Path("/{id}")
+    public Response get(@Context SecurityContext securityContext, @PathParam("id") String id) {
         return Response
-                .ok(userMapper.map(userService.retrieveById(id)))
+                .ok(userMapper.map(userService.retrieveById(securityService.getCurrentTenantId(securityContext), id)))
                 .build();
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response insert(UserDTO userDTO) {
-        User user = userService.insert(userMapper.map(userDTO));
+    public Response insert(UserDTO userDTO) throws Exception {
+        User user = userService.insert("1", userMapper.map(userDTO));
         return Response
                 .ok(userMapper.map(user))
                 .status(201)
@@ -54,10 +61,9 @@ public class UserResource {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response edit(UserDTO userDTO) {
-        User user = userService.update(userMapper.map(userDTO));
+    @Path("/{id}")
+    public Response edit(@Context SecurityContext securityContext, @PathParam("id") String id, UserDTO userDTO) throws Exception {
+        User user = userService.update(securityService.getCurrentTenantId(securityContext), id, userMapper.map(userDTO));
         return Response
                 .ok(userMapper.map(user))
                 .build();
@@ -65,8 +71,8 @@ public class UserResource {
 
     @DELETE
     @Path("/{id}")
-    public Response delete(@PathParam("id") String id) {
-        userService.delete(id);
+    public Response delete(@Context SecurityContext securityContext, @PathParam("id") String id) throws Exception {
+        userService.delete(securityService.getCurrentTenantId(securityContext), id);
         return Response.noContent().build();
     }
 }

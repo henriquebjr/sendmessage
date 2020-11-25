@@ -5,6 +5,7 @@ import com.henriquebjr.sendmessage.api.v1.mapper.TenantMapper;
 import com.henriquebjr.sendmessage.model.Tenant;
 import com.henriquebjr.sendmessage.service.TenantService;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -18,6 +19,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/tenants")
+@RolesAllowed("admin")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public class TenantResource {
 
     @Inject
@@ -27,7 +31,6 @@ public class TenantResource {
     private TenantMapper tenantMapper;
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
     public Response list() {
         return Response
                 .ok(tenantMapper.map(tenantService.listAll()))
@@ -36,7 +39,6 @@ public class TenantResource {
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
     public Response get(@PathParam("id") String id) {
         return Response
                 .ok(tenantMapper.map(tenantService.retrieveById(id)))
@@ -44,9 +46,7 @@ public class TenantResource {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response insert(TenantDTO tenantDTO) {
+    public Response insert(TenantDTO tenantDTO) throws Exception {
         Tenant tenant = tenantService.insert(tenantMapper.map(tenantDTO));
         return Response
                 .ok(tenantMapper.map(tenant))
@@ -55,10 +55,9 @@ public class TenantResource {
     }
 
     @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response edit(TenantDTO tenantDTO) {
-        Tenant tenant = tenantService.update(tenantMapper.map(tenantDTO));
+    @Path("/{id}")
+    public Response edit(@PathParam("id") String id, TenantDTO tenantDTO) {
+        Tenant tenant = tenantService.update(id, tenantMapper.map(tenantDTO));
         return Response
                 .ok(tenantMapper.map(tenant))
                 .build();

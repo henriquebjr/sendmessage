@@ -1,4 +1,4 @@
-package com.henriquebjr;
+package com.henriquebjr.sendmessage;
 
 import io.quarkus.test.junit.NativeImageTest;
 

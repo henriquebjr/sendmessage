@@ -39,10 +39,10 @@ public class Message {
     @Column
     private Date processedTime;
 
-    @Column
+    @Column(name = "CREATED_DATE")
     private Date createdDate;
 
-    @Column
+    @Column(name = "UPDATED_DATE")
     private Date updatedDate;
 
     public String getId() {

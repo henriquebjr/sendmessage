@@ -23,6 +23,13 @@ public class Tenant {
     @Column(name = "UPDATED_DATE")
     private Date updatedDate;
 
+    public Tenant() {
+    }
+
+    public Tenant(String id) {
+        this.id = id;
+    }
+
     public String getId() {
         return id;
     }

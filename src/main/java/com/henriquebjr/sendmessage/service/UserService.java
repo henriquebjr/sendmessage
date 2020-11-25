@@ -1,11 +1,16 @@
 package com.henriquebjr.sendmessage.service;
 
+import com.henriquebjr.sendmessage.model.Tenant;
 import com.henriquebjr.sendmessage.model.User;
 import com.henriquebjr.sendmessage.repository.UserRepository;
+import com.henriquebjr.sendmessage.service.exception.UserInvalidRoleException;
+import com.henriquebjr.sendmessage.service.exception.UserNotFoundException;
+import io.quarkus.elytron.security.common.BcryptUtil;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -19,18 +24,36 @@ public class UserService {
     private UserRepository userRepository;
 
     @Transactional
-    public User insert(User user) {
+    public User insert(String tenantId, User user) throws Exception {
+        verifyUserRole(user);
+
         user.setId(UUID.randomUUID().toString());
+        user.setTenant(new Tenant(tenantId));
+        user.setCreatedDate(new Date());
+        user.setActive(user.getActive() == null || user.getActive());
+        user.setPassword(BcryptUtil.bcryptHash(user.getPassword()));
+        user.setRole(user.getRole());
+
         userRepository.persist(user);
 
-        return userRepository.findById(user.getId());
+        return user;
+    }
+
+    private void verifyUserRole(User user) throws UserInvalidRoleException {
+        if(user.getRole() == null || user.getRole().isBlank()) {
+            user.setRole("user");
+        } else if(!user.getRole().equals("admin") && !user.getRole().equals("user")){
+            throw new UserInvalidRoleException();
+        }
     }
 
     @Transactional
-    public User update(User user) {
-        Optional<User> userOptional = userRepository.findByIdOptional(user.getId());
-        if(userOptional.isEmpty()) {
-            throw new RuntimeException("User not found. Id: " + user.getId());
+    public User update(String tenantId, String id, User user) throws Exception {
+        verifyUserRole(user);
+
+        Optional<User> userOptional = userRepository.findByIdOptional(id);
+        if(userOptional.isEmpty() || !userOptional.get().getTenant().getId().equals(tenantId)) {
+            throw new UserNotFoundException(id);
         }
 
         User currentUser = userOptional.get();
@@ -38,26 +61,30 @@ public class UserService {
         currentUser.setActive(user.getActive());
         currentUser.setName(user.getName());
 
+        if(user.getPassword() != null) {
+            currentUser.setPassword(BcryptUtil.bcryptHash(user.getPassword()));
+        }
+
         return currentUser;
     }
 
     @Transactional
-    public void delete(String id) {
+    public void delete(String tenantId, String id) throws Exception {
         Optional<User> userOptional = userRepository.findByIdOptional(id);
-        if(userOptional.isEmpty()) {
-            throw new RuntimeException("User not found. Id: " + id);
+        if(userOptional.isEmpty() || !userOptional.get().getTenant().getId().equals(tenantId)) {
+            throw new UserNotFoundException(id);
         }
 
         userRepository.delete(id);
     }
 
     @Transactional(NOT_SUPPORTED)
-    public List<User> listAll() {
-        return userRepository.listAll();
+    public List<User> listAll(String tenantId) {
+        return userRepository.listAll(tenantId);
     }
 
     @Transactional(NOT_SUPPORTED)
-    public User retrieveById(String userId) {
-        return userRepository.findById(userId);
+    public User retrieveById(String tenantId, String id) {
+        return userRepository.findById(tenantId, id);
     }
 }

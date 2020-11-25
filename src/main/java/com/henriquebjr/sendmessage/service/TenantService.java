@@ -1,6 +1,7 @@
 package com.henriquebjr.sendmessage.service;
 
 import com.henriquebjr.sendmessage.model.Tenant;
+import com.henriquebjr.sendmessage.model.User;
 import com.henriquebjr.sendmessage.repository.TenantRepository;
 
 import javax.enterprise.context.RequestScoped;
@@ -19,18 +20,33 @@ public class TenantService {
     @Inject
     private TenantRepository tenantRepository;
 
+    @Inject
+    private UserService userService;
+
     @Transactional
-    public Tenant insert(Tenant tenant) {
+    public Tenant insert(Tenant tenant) throws Exception {
         tenant.setId(UUID.randomUUID().toString());
         tenant.setCreatedDate(new Date());
-        tenantRepository.persist(tenant);
+        tenantRepository.persistAndFlush(tenant);
 
-        return tenantRepository.findById(tenant.getId());
+        createTenantAdmin(tenant);
+
+        return tenant;
+    }
+
+    private void createTenantAdmin(Tenant tenant) throws Exception {
+        User user = User.Builder.of()
+                .name("admin_" + tenant.getName())
+                .username("admin_" + tenant.getName())
+                .password("123")
+                .role("admin")
+                .build();
+        userService.insert(tenant.getId(), user);
     }
 
     @Transactional
-    public Tenant update(Tenant tenant) {
-        Optional<Tenant> tenantOptional = tenantRepository.findByIdOptional(tenant.getId());
+    public Tenant update(String tenantId, Tenant tenant) {
+        Optional<Tenant> tenantOptional = tenantRepository.findByIdOptional(tenantId);
         if(tenantOptional.isEmpty()) {
             throw new RuntimeException("Tenant not found. Id: " + tenant.getId());
         }
@@ -38,6 +54,7 @@ public class TenantService {
         Tenant currentTenant = tenantOptional.get();
         currentTenant.setActive(tenant.getActive());
         currentTenant.setName(tenant.getName());
+        currentTenant.setUpdatedDate(new Date());
 
         return currentTenant;
     }
