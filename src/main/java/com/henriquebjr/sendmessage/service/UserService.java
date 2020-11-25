@@ -21,7 +21,7 @@ import static javax.transaction.Transactional.TxType.NOT_SUPPORTED;
 public class UserService {
 
     @Inject
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Transactional
     public User insert(String tenantId, User user) throws Exception {

@@ -6,7 +6,6 @@ import com.henriquebjr.sendmessage.repository.UserRepository;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.SecurityContext;
 
 import static javax.transaction.Transactional.TxType.NOT_SUPPORTED;
@@ -15,7 +14,7 @@ import static javax.transaction.Transactional.TxType.NOT_SUPPORTED;
 public class SecurityService {
 
     @Inject
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Transactional(NOT_SUPPORTED)
     public User getCurrentUser(SecurityContext securityContext) {

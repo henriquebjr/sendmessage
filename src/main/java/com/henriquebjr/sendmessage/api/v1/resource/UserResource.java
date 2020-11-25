@@ -28,13 +28,13 @@ import javax.ws.rs.core.SecurityContext;
 public class UserResource {
 
     @Inject
-    private UserService userService;
+    UserService userService;
 
     @Inject
-    private UserMapper userMapper;
+    UserMapper userMapper;
 
     @Inject
-    private SecurityService securityService;
+    SecurityService securityService;
 
     @GET
     public Response list(@Context SecurityContext securityContext) {

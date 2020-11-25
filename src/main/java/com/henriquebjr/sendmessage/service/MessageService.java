@@ -13,7 +13,7 @@ import java.util.UUID;
 public class MessageService {
 
     @Inject
-    private MessageRepository messageRepository;
+    MessageRepository messageRepository;
 
     @Transactional
     public Message insert(User user, Message message) {

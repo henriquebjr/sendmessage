@@ -18,15 +18,16 @@ import static javax.transaction.Transactional.TxType.NOT_SUPPORTED;
 public class TenantService {
 
     @Inject
-    private TenantRepository tenantRepository;
+    TenantRepository tenantRepository;
 
     @Inject
-    private UserService userService;
+    UserService userService;
 
     @Transactional
     public Tenant insert(Tenant tenant) throws Exception {
         tenant.setId(UUID.randomUUID().toString());
         tenant.setCreatedDate(new Date());
+        tenant.setActive(tenant.getActive() == null || tenant.getActive());
         tenantRepository.persistAndFlush(tenant);
 
         createTenantAdmin(tenant);
@@ -35,9 +36,11 @@ public class TenantService {
     }
 
     private void createTenantAdmin(Tenant tenant) throws Exception {
+        var username = tenant.getName().equals("default") ? "admin"
+            : "admin_" + tenant.getName();
         User user = User.Builder.of()
-                .name("admin_" + tenant.getName())
-                .username("admin_" + tenant.getName())
+                .name(username)
+                .username(username)
                 .password("123")
                 .role("admin")
                 .build();
@@ -72,5 +75,10 @@ public class TenantService {
     @Transactional(NOT_SUPPORTED)
     public Tenant retrieveById(String tenantId) {
         return tenantRepository.findById(tenantId);
+    }
+
+    @Transactional(NOT_SUPPORTED)
+    public Long countAll() {
+        return tenantRepository.count();
     }
 }

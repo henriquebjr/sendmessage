@@ -69,4 +69,46 @@ public class Tenant {
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
     }
+
+
+    public static final class Builder {
+        private Tenant tenant;
+
+        private Builder() {
+            tenant = new Tenant();
+        }
+
+        public static Builder of() {
+            return new Builder();
+        }
+
+        public Builder id(String id) {
+            tenant.setId(id);
+            return this;
+        }
+
+        public Builder name(String name) {
+            tenant.setName(name);
+            return this;
+        }
+
+        public Builder active(Boolean active) {
+            tenant.setActive(active);
+            return this;
+        }
+
+        public Builder createdDate(Date createdDate) {
+            tenant.setCreatedDate(createdDate);
+            return this;
+        }
+
+        public Builder updatedDate(Date updatedDate) {
+            tenant.setUpdatedDate(updatedDate);
+            return this;
+        }
+
+        public Tenant build() {
+            return tenant;
+        }
+    }
 }

@@ -9,7 +9,7 @@ import javax.inject.Inject;
 public class MigrationService {
 
     @Inject
-    private Flyway flyway;
+    Flyway flyway;
 
     public void checkMigration() {
         System.out.println(flyway.info()

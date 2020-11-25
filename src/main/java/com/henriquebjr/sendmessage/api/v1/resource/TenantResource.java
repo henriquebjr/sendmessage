@@ -25,10 +25,10 @@ import javax.ws.rs.core.Response;
 public class TenantResource {
 
     @Inject
-    private TenantService tenantService;
+    TenantService tenantService;
 
     @Inject
-    private TenantMapper tenantMapper;
+    TenantMapper tenantMapper;
 
     @GET
     public Response list() {
