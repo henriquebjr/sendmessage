@@ -39,7 +39,7 @@ public class UserResource {
     @GET
     public Response list(@Context SecurityContext securityContext) {
         return Response
-                .ok(userMapper.map(userService.listAll(securityService.getCurrentTenantId(securityContext))))
+                .ok(userMapper.map(userService.retrieveAll(securityService.getCurrentTenantId(securityContext))))
                 .build();
     }
 

@@ -33,7 +33,7 @@ public class TenantResource {
     @GET
     public Response list() {
         return Response
-                .ok(tenantMapper.map(tenantService.listAll()))
+                .ok(tenantMapper.map(tenantService.retrieveAll()))
                 .build();
     }
 

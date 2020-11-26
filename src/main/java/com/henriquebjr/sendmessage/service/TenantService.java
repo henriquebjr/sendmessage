@@ -23,6 +23,21 @@ public class TenantService {
     @Inject
     UserService userService;
 
+    @Transactional(NOT_SUPPORTED)
+    public List<Tenant> retrieveAll() {
+        return tenantRepository.listAll();
+    }
+
+    @Transactional(NOT_SUPPORTED)
+    public Tenant retrieveById(String tenantId) {
+        return tenantRepository.findById(tenantId);
+    }
+
+    @Transactional(NOT_SUPPORTED)
+    public Long countAll() {
+        return tenantRepository.count();
+    }
+
     @Transactional
     public Tenant insert(Tenant tenant) throws Exception {
         tenant.setId(UUID.randomUUID().toString());
@@ -65,20 +80,5 @@ public class TenantService {
     @Transactional
     public void delete(String tenantId) {
         tenantRepository.deleteById(tenantId);
-    }
-
-    @Transactional(NOT_SUPPORTED)
-    public List<Tenant> listAll() {
-        return tenantRepository.listAll();
-    }
-
-    @Transactional(NOT_SUPPORTED)
-    public Tenant retrieveById(String tenantId) {
-        return tenantRepository.findById(tenantId);
-    }
-
-    @Transactional(NOT_SUPPORTED)
-    public Long countAll() {
-        return tenantRepository.count();
     }
 }

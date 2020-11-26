@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -20,24 +21,30 @@ public class Message {
     @Column
     private String message;
 
-    @JoinColumns(foreignKey = @ForeignKey(name = "FK_MESSAGE_USER"),
-            value = @JoinColumn(name = "CREATED_BY", referencedColumnName = "ID", insertable = false,
-                    updatable = false))
-    @ManyToOne
+    @JoinColumn(name = "TENANT_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Tenant tenant;
+
+    @JoinColumn(name = "CREATED_BY")
+    @ManyToOne(fetch = FetchType.LAZY)
     private User createdBy;
 
-    @Column
+    @Column(name = "SEND_TO")
     private String sendTo;
 
     @Column
     @Enumerated(EnumType.STRING)
-    private MessageStatusEnum messageStatus;
+    private MessageTypeEnum type;
 
     @Column
-    private Date scheduledTime;
+    @Enumerated(EnumType.STRING)
+    private MessageStatusEnum status;
 
-    @Column
-    private Date processedTime;
+    @Column(name = "SCHEDULED_DATE")
+    private Date scheduledDate;
+
+    @Column(name = "PROCESSED_DATE")
+    private Date processedDate;
 
     @Column(name = "CREATED_DATE")
     private Date createdDate;
@@ -61,6 +68,14 @@ public class Message {
         this.message = message;
     }
 
+    public Tenant getTenant() {
+        return tenant;
+    }
+
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
+    }
+
     public User getCreatedBy() {
         return createdBy;
     }
@@ -77,28 +92,36 @@ public class Message {
         this.sendTo = sendTo;
     }
 
-    public MessageStatusEnum getMessageStatus() {
-        return messageStatus;
+    public MessageTypeEnum getType() {
+        return type;
     }
 
-    public void setMessageStatus(MessageStatusEnum messageStatus) {
-        this.messageStatus = messageStatus;
+    public void setType(MessageTypeEnum type) {
+        this.type = type;
     }
 
-    public Date getScheduledTime() {
-        return scheduledTime;
+    public MessageStatusEnum getStatus() {
+        return status;
     }
 
-    public void setScheduledTime(Date scheduledTime) {
-        this.scheduledTime = scheduledTime;
+    public void setStatus(MessageStatusEnum status) {
+        this.status = status;
     }
 
-    public Date getProcessedTime() {
-        return processedTime;
+    public Date getScheduledDate() {
+        return scheduledDate;
     }
 
-    public void setProcessedTime(Date processedTime) {
-        this.processedTime = processedTime;
+    public void setScheduledDate(Date scheduledDate) {
+        this.scheduledDate = scheduledDate;
+    }
+
+    public Date getProcessedDate() {
+        return processedDate;
+    }
+
+    public void setProcessedDate(Date processedDate) {
+        this.processedDate = processedDate;
     }
 
     public Date getCreatedDate() {

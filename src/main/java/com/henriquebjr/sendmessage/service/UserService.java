@@ -23,6 +23,16 @@ public class UserService {
     @Inject
     UserRepository userRepository;
 
+    @Transactional(NOT_SUPPORTED)
+    public List<User> retrieveAll(String tenantId) {
+        return userRepository.listAll(tenantId);
+    }
+
+    @Transactional(NOT_SUPPORTED)
+    public User retrieveById(String tenantId, String id) {
+        return userRepository.findById(tenantId, id);
+    }
+
     @Transactional
     public User insert(String tenantId, User user) throws Exception {
         verifyUserRole(user);
@@ -76,15 +86,5 @@ public class UserService {
         }
 
         userRepository.delete(id);
-    }
-
-    @Transactional(NOT_SUPPORTED)
-    public List<User> listAll(String tenantId) {
-        return userRepository.listAll(tenantId);
-    }
-
-    @Transactional(NOT_SUPPORTED)
-    public User retrieveById(String tenantId, String id) {
-        return userRepository.findById(tenantId, id);
     }
 }

@@ -10,15 +10,17 @@ public class MessageDTO {
 
     private String message;
 
+    private String type;
+
     private User createdBy;
 
     private String sendTo;
 
-    private String messageStatus;
+    private String status;
 
-    private Date scheduledTime;
+    private Date scheduledDate;
 
-    private Date processedTime;
+    private Date processedDate;
 
     private Date createdDate;
 
@@ -40,6 +42,14 @@ public class MessageDTO {
         this.message = message;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public User getCreatedBy() {
         return createdBy;
     }
@@ -56,28 +66,28 @@ public class MessageDTO {
         this.sendTo = sendTo;
     }
 
-    public String getMessageStatus() {
-        return messageStatus;
+    public String getStatus() {
+        return status;
     }
 
-    public void setMessageStatus(String messageStatus) {
-        this.messageStatus = messageStatus;
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public Date getScheduledTime() {
-        return scheduledTime;
+    public Date getScheduledDate() {
+        return scheduledDate;
     }
 
-    public void setScheduledTime(Date scheduledTime) {
-        this.scheduledTime = scheduledTime;
+    public void setScheduledDate(Date scheduledDate) {
+        this.scheduledDate = scheduledDate;
     }
 
-    public Date getProcessedTime() {
-        return processedTime;
+    public Date getProcessedDate() {
+        return processedDate;
     }
 
-    public void setProcessedTime(Date processedTime) {
-        this.processedTime = processedTime;
+    public void setProcessedDate(Date processedDate) {
+        this.processedDate = processedDate;
     }
 
     public Date getCreatedDate() {
