@@ -1,6 +1,7 @@
 package com.henriquebjr.sendmessage.api.v1.mapper;
 
 import com.henriquebjr.sendmessage.api.v1.dto.TenantDTO;
+import com.henriquebjr.sendmessage.api.v1.dto.TenantListDTO;
 import com.henriquebjr.sendmessage.model.Tenant;
 import org.mapstruct.Mapper;
 
@@ -14,5 +15,9 @@ public interface TenantMapper {
     List<TenantDTO> map(List<Tenant> tenants);
 
     Tenant map(TenantDTO tenantDTO);
+
+    default TenantListDTO map(List<Tenant> tenants, boolean hasNext) {
+        return new TenantListDTO(map(tenants));
+    }
 
 }

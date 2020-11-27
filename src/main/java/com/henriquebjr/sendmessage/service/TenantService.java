@@ -3,6 +3,7 @@ package com.henriquebjr.sendmessage.service;
 import com.henriquebjr.sendmessage.model.Tenant;
 import com.henriquebjr.sendmessage.model.User;
 import com.henriquebjr.sendmessage.repository.TenantRepository;
+import com.henriquebjr.sendmessage.service.exception.TenantNotFoundException;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -63,10 +64,10 @@ public class TenantService {
     }
 
     @Transactional
-    public Tenant update(String tenantId, Tenant tenant) {
+    public Tenant update(String tenantId, Tenant tenant) throws Exception {
         Optional<Tenant> tenantOptional = tenantRepository.findByIdOptional(tenantId);
         if(tenantOptional.isEmpty()) {
-            throw new RuntimeException("Tenant not found. Id: " + tenant.getId());
+            throw new TenantNotFoundException(tenantId);
         }
 
         Tenant currentTenant = tenantOptional.get();

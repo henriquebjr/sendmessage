@@ -70,6 +70,7 @@ public class UserService {
 
         currentUser.setActive(user.getActive());
         currentUser.setName(user.getName());
+        currentUser.setRole(user.getRole());
 
         if(user.getPassword() != null) {
             currentUser.setPassword(BcryptUtil.bcryptHash(user.getPassword()));

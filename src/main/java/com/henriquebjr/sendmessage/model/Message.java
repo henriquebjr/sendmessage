@@ -5,10 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import java.util.Date;
 
@@ -138,5 +136,77 @@ public class Message {
 
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+
+    public static final class Builder {
+        private Message message;
+
+        private Builder() {
+            message = new Message();
+        }
+
+        public static Builder of() {
+            return new Builder();
+        }
+
+        public Builder id(String id) {
+            message.setId(id);
+            return this;
+        }
+
+        public Builder message(String msg) {
+            message.setMessage(msg);
+            return this;
+        }
+
+        public Builder tenant(Tenant tenant) {
+            message.setTenant(tenant);
+            return this;
+        }
+
+        public Builder createdBy(User createdBy) {
+            message.setCreatedBy(createdBy);
+            return this;
+        }
+
+        public Builder sendTo(String sendTo) {
+            message.setSendTo(sendTo);
+            return this;
+        }
+
+        public Builder type(MessageTypeEnum type) {
+            message.setType(type);
+            return this;
+        }
+
+        public Builder status(MessageStatusEnum status) {
+            message.setStatus(status);
+            return this;
+        }
+
+        public Builder scheduledDate(Date scheduledDate) {
+            message.setScheduledDate(scheduledDate);
+            return this;
+        }
+
+        public Builder processedDate(Date processedDate) {
+            message.setProcessedDate(processedDate);
+            return this;
+        }
+
+        public Builder createdDate(Date createdDate) {
+            message.setCreatedDate(createdDate);
+            return this;
+        }
+
+        public Builder updatedDate(Date updatedDate) {
+            message.setUpdatedDate(updatedDate);
+            return this;
+        }
+
+        public Message build() {
+            return message;
+        }
     }
 }

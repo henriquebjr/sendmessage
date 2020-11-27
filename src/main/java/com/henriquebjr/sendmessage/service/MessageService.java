@@ -49,7 +49,7 @@ public class MessageService {
         message.setStatus(MessageStatusEnum.PENDING);
         messageRepository.persist(message);
 
-        return messageRepository.findById(message.getId());
+        return message;
     }
 
     private void validate(Message message) throws MessageTypeMandatoryException, MessageAddresseeMandatoryException {

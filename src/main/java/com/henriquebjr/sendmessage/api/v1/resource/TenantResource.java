@@ -1,6 +1,7 @@
 package com.henriquebjr.sendmessage.api.v1.resource;
 
 import com.henriquebjr.sendmessage.api.v1.dto.TenantDTO;
+import com.henriquebjr.sendmessage.api.v1.dto.TenantListDTO;
 import com.henriquebjr.sendmessage.api.v1.mapper.TenantMapper;
 import com.henriquebjr.sendmessage.model.Tenant;
 import com.henriquebjr.sendmessage.service.TenantService;
@@ -56,7 +57,7 @@ public class TenantResource {
 
     @PUT
     @Path("/{id}")
-    public Response edit(@PathParam("id") String id, TenantDTO tenantDTO) {
+    public Response edit(@PathParam("id") String id, TenantDTO tenantDTO) throws Exception {
         Tenant tenant = tenantService.update(id, tenantMapper.map(tenantDTO));
         return Response
                 .ok(tenantMapper.map(tenant))
