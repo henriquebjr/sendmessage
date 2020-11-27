@@ -1,10 +1,11 @@
 package com.henriquebjr.sendmessage.api.v1.resource;
 
 import com.henriquebjr.sendmessage.api.v1.dto.TenantDTO;
-import com.henriquebjr.sendmessage.api.v1.dto.TenantListDTO;
 import com.henriquebjr.sendmessage.api.v1.mapper.TenantMapper;
 import com.henriquebjr.sendmessage.model.Tenant;
 import com.henriquebjr.sendmessage.service.TenantService;
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.info.Info;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -19,6 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+@OpenAPIDefinition(info = @Info(title="Tenants", version="1.0"))
 @Path("/tenants")
 @RolesAllowed("admin")
 @Consumes(MediaType.APPLICATION_JSON)
