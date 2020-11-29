@@ -11,13 +11,10 @@ import java.util.List;
 @Mapper(componentModel = "cdi")
 public interface MessageMapper {
 
-    // @Mapping(source = "messageDTO.scheduledDate", target = "scheduledDate", dateFormat ="yyyy-MM-dd HH:mm:ss")
-
     @Mappings({
             @Mapping(source = "messageDTO.type", target = "type")
     })
     Message map(MessageDTO messageDTO);
-
 
     MessageDTO map(Message message);
 

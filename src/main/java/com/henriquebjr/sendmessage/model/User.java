@@ -1,51 +1,26 @@
 package com.henriquebjr.sendmessage.model;
 
-import io.quarkus.security.jpa.Password;
-import io.quarkus.security.jpa.Roles;
-import io.quarkus.security.jpa.UserDefinition;
-import io.quarkus.security.jpa.Username;
-
 import javax.json.bind.annotation.JsonbTransient;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.util.Date;
 
-@Entity
-@UserDefinition
 public class User {
 
-    @Id
     private String id;
 
-    @Username
-    @Column
     private String username;
 
-    @Password
-    @Column
     private String password;
 
-    @Column
     private String name;
 
-    @Column
     private Boolean active;
 
-    @Column(name = "CREATED_DATE")
     private Date createdDate;
 
-    @Column(name = "UPDATED_DATE")
     private Date updatedDate;
 
-    @JoinColumn(name = "TENANT_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
     private Tenant tenant;
 
-    @Roles
     private String role;
 
     public String getId() {

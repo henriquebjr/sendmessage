@@ -44,7 +44,7 @@ public class TenantService {
         tenant.setId(UUID.randomUUID().toString());
         tenant.setCreatedDate(new Date());
         tenant.setActive(tenant.getActive() == null || tenant.getActive());
-        tenantRepository.persistAndFlush(tenant);
+        tenantRepository.persist(tenant);
 
         createTenantAdmin(tenant);
 

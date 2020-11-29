@@ -1,53 +1,29 @@
 package com.henriquebjr.sendmessage.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import java.util.Date;
 
-@Entity
 public class Message {
 
-    @Id
     private String id;
 
-    @Column
-    private String message;
-
-    @JoinColumn(name = "TENANT_ID")
-    @ManyToOne(fetch = FetchType.LAZY)
     private Tenant tenant;
 
-    @JoinColumn(name = "CREATED_BY")
-    @ManyToOne(fetch = FetchType.LAZY)
     private User createdBy;
 
-    @Column(name = "SEND_TO")
+    private String message;
+
     private String sendTo;
 
-    @Column
-    @Enumerated(EnumType.STRING)
     private MessageTypeEnum type;
 
-    @Column
-    @Enumerated(EnumType.STRING)
     private MessageStatusEnum status;
 
-    @Column(name = "SCHEDULED_DATE")
     private Date scheduledDate;
 
-    @Column(name = "PROCESSED_DATE")
     private Date processedDate;
 
-    @Column(name = "CREATED_DATE")
     private Date createdDate;
 
-    @Column(name = "UPDATED_DATE")
     private Date updatedDate;
 
     public String getId() {

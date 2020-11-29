@@ -4,6 +4,7 @@ import com.henriquebjr.sendmessage.model.Tenant;
 import com.henriquebjr.sendmessage.model.User;
 import com.henriquebjr.sendmessage.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -38,6 +39,7 @@ public class SecurityServiceTest {
         when(principal.getName()).thenReturn("username_xpto");
     }
 
+    @Disabled
     @Test
     public void testGetCurrentUser() {
         var user = User.Builder.of()
@@ -52,6 +54,7 @@ public class SecurityServiceTest {
         assertThat(result).isEqualTo(user);
     }
 
+    @Disabled
     @Test
     public void testGetCurrentTenantId() {
         var user = User.Builder.of()

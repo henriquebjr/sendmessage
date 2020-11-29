@@ -5,18 +5,14 @@ import com.henriquebjr.sendmessage.model.MessageStatusEnum;
 import com.henriquebjr.sendmessage.model.User;
 import com.henriquebjr.sendmessage.repository.MessageRepository;
 import com.henriquebjr.sendmessage.service.exception.MessageAddresseeMandatoryException;
-import com.henriquebjr.sendmessage.service.exception.MessageNotFoundException;
 import com.henriquebjr.sendmessage.service.exception.MessageTypeMandatoryException;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.util.Date;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-
-import static javax.transaction.Transactional.TxType.NOT_SUPPORTED;
 
 @RequestScoped
 public class MessageService {
@@ -24,21 +20,14 @@ public class MessageService {
     @Inject
     MessageRepository messageRepository;
 
-    @Transactional(NOT_SUPPORTED)
-    public List<Message> retrieveAll(String tenantId) {
+    public Multi<Message> retrieveAll(String tenantId) {
         return messageRepository.listAll(tenantId);
     }
 
-    @Transactional(NOT_SUPPORTED)
-    public Message retrieveById(String tenantId, String id) throws Exception{
-        Optional<Message> messageOptional = messageRepository.findByIdOptional(tenantId, id);
-        if(messageOptional.isEmpty()) {
-            throw new MessageNotFoundException(id);
-        }
-        return messageOptional.get();
+    public Uni<Message> retrieveById(String tenantId, String id) throws Exception{
+        return messageRepository.findByIdOptional(tenantId, id);
     }
 
-    @Transactional
     public Message insert(User currentUser, Message message) throws Exception{
         validate(message);
 
@@ -62,9 +51,8 @@ public class MessageService {
         }
     }
 
-    @Transactional
     public Message update(User currentUser, String id, Message message) throws Exception {
-        validate(message);
+        /*validate(message);
 
         Optional<Message> messageOptional = messageRepository.findByIdOptional(currentUser.getTenant().getId(), id);
         if(messageOptional.isEmpty()) {
@@ -78,16 +66,18 @@ public class MessageService {
         currentMessage.setType(message.getType());
         currentMessage.setUpdatedDate(new Date());
 
-        return currentMessage;
+        return currentMessage;*/
+        return null;
     }
 
-    @Transactional
     public void delete(User currentUser, String id) throws Exception {
+        /*
         Optional<Message> messageOptional = messageRepository.findByIdOptional(currentUser.getTenant().getId(), id);
         if(messageOptional.isEmpty()) {
             throw new MessageNotFoundException(id);
         }
+         */
 
-        messageRepository.deleteById(id);
+        //messageRepository.deleteById(id);
     }
 }

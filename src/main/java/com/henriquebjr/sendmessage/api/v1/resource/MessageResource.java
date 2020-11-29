@@ -5,6 +5,8 @@ import com.henriquebjr.sendmessage.api.v1.mapper.MessageMapper;
 import com.henriquebjr.sendmessage.model.Message;
 import com.henriquebjr.sendmessage.service.MessageService;
 import com.henriquebjr.sendmessage.service.SecurityService;
+import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -37,18 +39,16 @@ public class MessageResource {
     MessageMapper messageMapper;
 
     @GET
-    public Response list(@Context SecurityContext securityContext) {
-        return Response
-                .ok(messageMapper.map(messageService.retrieveAll(securityService.getCurrentTenantId(securityContext))))
-                .build();
+    public Multi<MessageDTO> list(@Context SecurityContext securityContext) {
+        return messageService.retrieveAll(securityService.getCurrentTenantId(securityContext))
+                .map(m -> messageMapper.map(m));
     }
 
     @GET
     @Path("/{id}")
-    public Response get(@Context SecurityContext securityContext, @PathParam("id") String id) throws Exception{
-        return Response
-                .ok(messageMapper.map(messageService.retrieveById(securityService.getCurrentTenantId(securityContext), id)))
-                .build();
+    public Uni<MessageDTO> get(@Context SecurityContext securityContext, @PathParam("id") String id) throws Exception{
+        return messageService.retrieveById(securityService.getCurrentTenantId(securityContext), id)
+                .map(m -> messageMapper.map(m));
     }
 
     @POST
