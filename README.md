@@ -1,4 +1,4 @@
-# sendmessage
+# Send Message
 Serviço para envio de mensagens de e-mail, SMS, PUSH e whatsapp.
 
 
@@ -40,3 +40,13 @@ senha: 123
 
 Nessário utilizar este usuário seja para configurar outros usuários ou para apenas configurar com uma senha mais segura.
 
+## Estrutura/Diagrama de Classes
+
+![Diagrama](src/main/resources/diagram.png?raw=true)
+
+A classe MessageService é a responsável por receber e armazenar as mensagens recebidas, colocando todas elas com status "pending".  
+
+## Melhorias
+
+- Testes integrados/Rest
+- Versão reativa (há um branch feature com o início desta implementação, porém apenas a busca de registros está funcionando)
