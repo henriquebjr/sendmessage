@@ -5,6 +5,8 @@ import com.henriquebjr.sendmessage.api.v1.mapper.MessageMapper;
 import com.henriquebjr.sendmessage.model.Message;
 import com.henriquebjr.sendmessage.service.MessageService;
 import com.henriquebjr.sendmessage.service.SecurityService;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -25,6 +27,7 @@ import javax.ws.rs.core.SecurityContext;
 @RolesAllowed({"admin", "user"})
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@Tag(name = "Message")
 public class MessageResource {
 
     @Inject
@@ -52,7 +55,7 @@ public class MessageResource {
     }
 
     @POST
-    public Response insert(@Context SecurityContext securityContext, MessageDTO messageDTODTO) throws Exception {
+    public Response insert(@Context SecurityContext securityContext, @RequestBody MessageDTO messageDTODTO) throws Exception {
         Message message = messageService.insert(securityService.getCurrentUser(securityContext), messageMapper.map(messageDTODTO));
         return Response
                 .ok(messageMapper.map(message))
@@ -62,7 +65,7 @@ public class MessageResource {
 
     @PUT
     @Path("/{id}")
-    public Response edit(@Context SecurityContext securityContext, @PathParam("id") String id, MessageDTO messageDTO) throws Exception {
+    public Response edit(@Context SecurityContext securityContext, @PathParam("id") String id, @RequestBody MessageDTO messageDTO) throws Exception {
         Message message = messageService.update(securityService.getCurrentUser(securityContext), id, messageMapper.map(messageDTO));
         return Response
                 .ok(messageMapper.map(message))

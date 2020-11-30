@@ -6,6 +6,8 @@ import com.henriquebjr.sendmessage.model.Tenant;
 import com.henriquebjr.sendmessage.service.TenantService;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -20,11 +22,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@OpenAPIDefinition(info = @Info(title="Tenants", version="1.0"))
 @Path("/tenants")
 @RolesAllowed("admin")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@Tag(name = "Tenant")
 public class TenantResource {
 
     @Inject
@@ -49,7 +51,7 @@ public class TenantResource {
     }
 
     @POST
-    public Response insert(TenantDTO tenantDTO) throws Exception {
+    public Response insert(@RequestBody TenantDTO tenantDTO) throws Exception {
         Tenant tenant = tenantService.insert(tenantMapper.map(tenantDTO));
         return Response
                 .ok(tenantMapper.map(tenant))
@@ -59,7 +61,7 @@ public class TenantResource {
 
     @PUT
     @Path("/{id}")
-    public Response edit(@PathParam("id") String id, TenantDTO tenantDTO) throws Exception {
+    public Response edit(@PathParam("id") String id, @RequestBody TenantDTO tenantDTO) throws Exception {
         Tenant tenant = tenantService.update(id, tenantMapper.map(tenantDTO));
         return Response
                 .ok(tenantMapper.map(tenant))

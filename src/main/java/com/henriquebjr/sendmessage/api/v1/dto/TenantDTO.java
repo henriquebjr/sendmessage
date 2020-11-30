@@ -53,4 +53,45 @@ public class TenantDTO {
     public void setUpdatedDate(Date updatedDate) {
         this.updatedDate = updatedDate;
     }
+
+    public static final class Builder {
+        private TenantDTO tenantDTO;
+
+        private Builder() {
+            tenantDTO = new TenantDTO();
+        }
+
+        public static Builder of() {
+            return new Builder();
+        }
+
+        public Builder id(String id) {
+            tenantDTO.setId(id);
+            return this;
+        }
+
+        public Builder name(String name) {
+            tenantDTO.setName(name);
+            return this;
+        }
+
+        public Builder active(Boolean active) {
+            tenantDTO.setActive(active);
+            return this;
+        }
+
+        public Builder createdDate(Date createdDate) {
+            tenantDTO.setCreatedDate(createdDate);
+            return this;
+        }
+
+        public Builder updatedDate(Date updatedDate) {
+            tenantDTO.setUpdatedDate(updatedDate);
+            return this;
+        }
+
+        public TenantDTO build() {
+            return tenantDTO;
+        }
+    }
 }
